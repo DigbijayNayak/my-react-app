@@ -20,10 +20,6 @@ function App() {
         )}
 
         <Route path="*" element={<Navigate to="/" replace={true} />} />
-
-        {/* <Route path="/profile">
-          <UserProfile />
-        </Route> */}
       </Routes>
     </Layout>
   );
