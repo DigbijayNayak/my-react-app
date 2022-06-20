@@ -2,6 +2,8 @@ import { useState, useRef, useContext } from "react";
 import classes from "./AuthForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { useNavigate } from "react-router-dom";
+import GoogleLogin from "react-google-login";
+import Facebook from "./Facebook";
 
 const AuthForm = () => {
   //   const history = useHistory();
@@ -54,9 +56,9 @@ const AuthForm = () => {
             //show an error modal
             // console.log(data);
             let errorMessage = "Authentication failed!";
-            // if (data && data.error && data.error.message) {
-            //   errorMessage = data.error.message;
-            // }
+            if (data && data.error && data.error.message) {
+              errorMessage = data.error.message;
+            }
             alert(errorMessage);
             throw new Error(errorMessage);
           });
@@ -72,6 +74,18 @@ const AuthForm = () => {
         alert(err.message);
       });
   };
+
+  const handleFailure = (result) => {
+    console.log(result);
+  };
+
+  const handleLogin = (googleData) => {
+    console.log(googleData);
+  };
+
+  // const responseGoogle = response => {
+  //   console.log(response);
+  // };
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? "Login" : "Sign Up"}</h1>
@@ -103,6 +117,17 @@ const AuthForm = () => {
           >
             {isLogin ? "Create new account" : "Login with existing account"}
           </button>
+        </div>
+        <hr />
+        <div className={classes.social}>
+          <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            buttonText="LogIn with Google"
+            onSuccess={handleLogin}
+            onFailure={handleFailure}
+            cookiePolicy={"single_host_origin"}
+          ></GoogleLogin><br/>
+          <Facebook />
         </div>
       </form>
     </section>
