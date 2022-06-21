@@ -171,11 +171,12 @@ const AuthForm = () => {
             ></GoogleLogin>
           )} */}
           <GoogleLogin
-            clientId="164295083266-40tbuc06ni9d8vv1n8vp9k2enc0gdd4v.apps.googleusercontent.com"
+            clientId="25320623642-rb429h00kcgqlir9rk4pi1sv5tp4ocro.apps.googleusercontent.com"
             buttonText="LogIn with Google"
             onSuccess={handleLogin}
             onFailure={handleFailure}
             cookiePolicy={"single_host_origin"}
+            className="log"
           ></GoogleLogin>
           <br />
           <FacebookLogin
