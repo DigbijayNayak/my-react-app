@@ -1,6 +1,6 @@
 .auth {
     margin: 3rem auto;
-    width: 95%;
+    width: 20%;
     max-width: 25rem;
     border-radius: 6px;
     background-color: #000;
@@ -75,5 +75,8 @@
   }
 
   .social{
+    text-align: center;
+  }
+  .or{
     text-align: center;
   }

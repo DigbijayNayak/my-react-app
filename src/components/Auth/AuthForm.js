@@ -3,7 +3,9 @@ import classes from "./AuthForm.module.css";
 import AuthContext from "../../store/auth-context";
 import { useNavigate } from "react-router-dom";
 import GoogleLogin from "react-google-login";
-import Facebook from "./Facebook";
+import FacebookLogin from "react-facebook-login";
+import AppleSignin from "react-apple-signin-auth";
+// import Facebook from "./Facebook";
 
 const AuthForm = () => {
   //   const history = useHistory();
@@ -14,6 +16,11 @@ const AuthForm = () => {
   const authCtx = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  // const [loginData, setLoginData] = useState(
+  //   localStorage.getItem("loginData")
+  //     ? JSON.parse(localStorage.getItem("loginData"))
+  //     : null
+  // );
 
   const switchAuthModelHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -54,12 +61,12 @@ const AuthForm = () => {
         } else {
           return res.json().then((data) => {
             //show an error modal
-            // console.log(data);
+            console.log(data);
             let errorMessage = "Authentication failed!";
             if (data && data.error && data.error.message) {
               errorMessage = data.error.message;
             }
-            alert(errorMessage);
+            alert(data.error);
             throw new Error(errorMessage);
           });
         }
@@ -74,15 +81,45 @@ const AuthForm = () => {
         alert(err.message);
       });
   };
-
   const handleFailure = (result) => {
     console.log(result);
+    if (result.error === "popup_closed_by_user") {
+      authCtx.login(result.error);
+    }
   };
 
+  // const handleLogin = async (googleData) => {
+  //   const res = await fetch("/api/google-login", {
+  //     method: "POST",
+  //     body: JSON.stringify({
+  //       token: googleData.tokenId,
+  //     }),
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   });
+
+  //   const data = await res.json();
+  //   setLoginData(data);
+  //   localStorage.setItem("loginData", JSON.stringify(data));
+  // };
   const handleLogin = (googleData) => {
     console.log(googleData);
+    authCtx.login(googleData.accessToken);
   };
 
+  // const handleLogout = () => {
+  //   localStorage.removeItem("loginData");
+  //   setLoginData(null);
+  // };
+
+  const componentClicked = () => {
+    console.log("clicked");
+  };
+  const responseFacebook = (response) => {
+    console.log(response);
+    authCtx.login(response.accessToken);
+  };
   // const responseGoogle = response => {
   //   console.log(response);
   // };
@@ -94,7 +131,6 @@ const AuthForm = () => {
           <label htmlFor="email">Your Email</label>
           <input type="email" id="email" required ref={emailInputRef} />
         </div>
-
         <div className={classes.control}>
           <label htmlFor="password">Your Password</label>
           <input
@@ -104,7 +140,6 @@ const AuthForm = () => {
             ref={passwordInputRef}
           />
         </div>
-
         <div className={classes.actions}>
           {!isLoading && (
             <button>{isLogin ? "Login" : "Create Account"}</button>
@@ -118,16 +153,52 @@ const AuthForm = () => {
             {isLogin ? "Create new account" : "Login with existing account"}
           </button>
         </div>
+        <div className={classes.or}>Or</div>
         <hr />
         <div className={classes.social}>
+          {/* {loginData ? (
+            <div>
+              <h3>You logged in as {loginData.email}</h3>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          ) : (
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+              buttonText="LogIn with Google"
+              onSuccess={handleLogin}
+              onFailure={handleFailure}
+              cookiePolicy={"single_host_origin"}
+            ></GoogleLogin>
+          )} */}
           <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            clientId="164295083266-40tbuc06ni9d8vv1n8vp9k2enc0gdd4v.apps.googleusercontent.com"
             buttonText="LogIn with Google"
             onSuccess={handleLogin}
             onFailure={handleFailure}
             cookiePolicy={"single_host_origin"}
-          ></GoogleLogin><br/>
-          <Facebook />
+          ></GoogleLogin>
+          <br />
+          <FacebookLogin
+            appId="1238901713537016"
+            fields="name,email,picture"
+            onClick={componentClicked}
+            callback={responseFacebook}
+            // icon="fa-facebook"
+          />
+          <br />
+          <AppleSignin
+            authOptions={{
+              clientId: "com.example.web",
+              scope: "email name",
+              redirectURI: "https://example.com",
+              state: "",
+              nonce: "nonce",
+              usePopup: true,
+            }}
+            uiType="dark"
+            // className="apple-auth-btn"
+          />
+          {/* <Facebook /> */}
         </div>
       </form>
     </section>
