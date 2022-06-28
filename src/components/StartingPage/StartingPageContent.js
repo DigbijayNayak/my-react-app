@@ -3,7 +3,7 @@ const StartingPageContent = () => {
   return (
     <div>
       <section className={classes.starting}>
-        <h1>Welcome To My Site!</h1>
+        <h2>Welcome To My Site!</h2>
       </section>
     </div>
   );

@@ -127,7 +127,7 @@ const AuthForm = () => {
     <section className={classes.auth}>
       <h1>{isLogin ? "Login" : "Sign Up"}</h1>
       <form onSubmit={submitHandler}>
-        <div className={classes.control}>
+        <div className={classes.control} id="email">
           <label htmlFor="email">Your Email</label>
           <input type="email" id="email" required ref={emailInputRef} />
         </div>
@@ -140,14 +140,15 @@ const AuthForm = () => {
             ref={passwordInputRef}
           />
         </div>
-        <div className={classes.actions}>
+        <div className={classes.actions} id="">
           {!isLoading && (
-            <button>{isLogin ? "Login" : "Create Account"}</button>
+            <button id="btn1">{isLogin ? "Login" : "Create Account"}</button>
           )}
           {isLoading && <p>Sending request...</p>}
           <button
             type="button"
             className={classes.toggle}
+            id="btn2"
             onClick={switchAuthModelHandler}
           >
             {isLogin ? "Create new account" : "Login with existing account"}
